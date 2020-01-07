@@ -14,6 +14,7 @@ class ViewController: UIViewController,
                       CLLocationManagerDelegate,
                       UIGestureRecognizerDelegate,
                       MKMapViewDelegate{
+    
     @IBOutlet var map: MKMapView!
     @IBOutlet var LongPress: UILongPressGestureRecognizer!
     var locManager:CLLocationManager!
@@ -34,19 +35,19 @@ class ViewController: UIViewController,
              ARpage.pinlat = Float(pointAno.coordinate.latitude)
              ARpage.currentlat = Float(map.userLocation.coordinate.latitude)
              ARpage.currentlon = Float(map.userLocation.coordinate.longitude)
-             
+            
              self.present(ARpage,animated: true,completion: nil)
-         
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         map.delegate = self
         locManager = CLLocationManager()
         locManager.delegate = self
         locManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         locManager.requestWhenInUseAuthorization()
-
+        
         if CLLocationManager.locationServicesEnabled(){
             switch CLLocationManager.authorizationStatus(){
             case .authorizedAlways:
@@ -174,6 +175,7 @@ class ViewController: UIViewController,
         if pointAno.coordinate.latitude == 0{
             button.isEnabled = false
         }
+
     }
     
     func updateCurrentpos(_ coordinate:CLLocationCoordinate2D){
@@ -190,13 +192,24 @@ class ViewController: UIViewController,
         else if sender.state == .ended{
         let tappoint = sender.location(in: view)
         let center = map.convert(tappoint, toCoordinateFrom: map)
-        
         pointAno.coordinate = center
-        
-        map.addAnnotation(pointAno)
-        button.isEnabled = true
-        
-        pointAno.title = "目的地"
+        let distance = CalcDistance(map.userLocation.coordinate,pointAno.coordinate)
+            if distance >= 3001.0{
+                button.isEnabled = false
+                map.removeAnnotation(pointAno)
+                let alert:UIAlertController = UIAlertController(title:"error!",message:"距離が遠すぎます", preferredStyle: UIAlertController.Style.alert)
+                let confirmAction: UIAlertAction = UIAlertAction(title: "もどる", style: UIAlertAction.Style.default, handler:{
+                // 確定ボタンが押された時の処理をクロージャ実装する
+                (action: UIAlertAction!) -> Void in
+                })
+                alert.addAction(confirmAction)
+                present(alert,animated: true,completion: nil)
+            }else{
+                map.addAnnotation(pointAno)
+                     button.isEnabled = true
+                     pointAno.title = String(distance)
+            }
+     
         
         }
         
@@ -208,7 +221,6 @@ class ViewController: UIViewController,
             let dist = bloc.distance(from: aloc)
             return dist
     }
-    
-    
+
 }
 

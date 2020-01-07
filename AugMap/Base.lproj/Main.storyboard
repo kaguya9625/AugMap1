@@ -15,20 +15,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="W4o-Bn-ZR4">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="W4o-Bn-ZR4">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <gestureRecognizers/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="bDN-Td-6ef" appends="YES" id="ih4-o1-9ZJ"/>
                                 </connections>
                             </mapView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bu8-o1-aWl">
-                                <rect key="frame" x="155" y="612" width="65" height="55"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="AR">
-                                    <color key="titleColor" systemColor="systemBrownColor" red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
+                            <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bu8-o1-aWl">
+                                <rect key="frame" x="82.5" y="600" width="210" height="47"/>
+                                <fontDescription key="fontDescription" name="RictyDiminished-Oblique" family="Ricty Diminished" pointSize="30"/>
+                                <state key="normal" title="方向を確認する"/>
                                 <connections>
                                     <action selector="ARbutton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="MOd-2t-xZH"/>
                                 </connections>
@@ -36,7 +33,15 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <gestureRecognizers/>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="W4o-Bn-ZR4" secondAttribute="bottom" id="5mr-tO-aH0"/>
+                            <constraint firstItem="W4o-Bn-ZR4" firstAttribute="leading" secondItem="B5e-6N-7mh" secondAttribute="leading" id="7l1-NZ-k8X"/>
+                            <constraint firstItem="W4o-Bn-ZR4" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="Gp8-YI-uGs"/>
+                            <constraint firstItem="B5e-6N-7mh" firstAttribute="bottom" secondItem="bu8-o1-aWl" secondAttribute="bottom" constant="20" id="NEn-oT-doh"/>
+                            <constraint firstItem="W4o-Bn-ZR4" firstAttribute="trailing" secondItem="B5e-6N-7mh" secondAttribute="trailing" id="eeX-x8-dnF"/>
+                            <constraint firstItem="bu8-o1-aWl" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="sgN-rf-4yp"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="B5e-6N-7mh"/>
                     </view>
                     <connections>
                         <outlet property="LongPress" destination="bDN-Td-6ef" id="HPx-uM-YLC"/>
@@ -51,7 +56,7 @@
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-47.200000000000003" y="202.84857571214394"/>
+            <point key="canvasLocation" x="-48.799999999999997" y="201.04947526236884"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="vT0-xm-6Ba">
@@ -61,30 +66,38 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <arView multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rXg-l0-lk7">
+                            <arView multipleTouchEnabled="YES" contentMode="scaleAspectFill" translatesAutoresizingMaskIntoConstraints="NO" id="rXg-l0-lk7">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </arView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XNe-nf-cKL">
-                                <rect key="frame" x="160" y="613" width="55" height="54"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="MAP"/>
+                            <button opaque="NO" contentMode="scaleAspectFit" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XNe-nf-cKL">
+                                <rect key="frame" x="67" y="584" width="240" height="83"/>
+                                <fontDescription key="fontDescription" name="RictyDiminished-Oblique" family="Ricty Diminished" pointSize="27"/>
+                                <state key="normal" title="MAPへもどる"/>
                                 <connections>
-                                    <action selector="back:" destination="CUO-l9-S9m" eventType="touchUpInside" id="5EO-ww-yeZ"/>
+                                    <action selector="backbutton:" destination="CUO-l9-S9m" eventType="touchUpInside" id="B8w-kM-too"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <viewLayoutGuide key="safeArea" id="suo-x8-zGV"/>
+                        <constraints>
+                            <constraint firstItem="rXg-l0-lk7" firstAttribute="leading" secondItem="QcZ-MV-87a" secondAttribute="leading" id="7c8-yx-5lb"/>
+                            <constraint firstItem="XNe-nf-cKL" firstAttribute="leading" secondItem="QcZ-MV-87a" secondAttribute="leading" constant="67" id="Hir-Dc-UPm"/>
+                            <constraint firstItem="rXg-l0-lk7" firstAttribute="centerX" secondItem="b19-nc-ckk" secondAttribute="centerX" id="NG8-Cm-3TV"/>
+                            <constraint firstItem="rXg-l0-lk7" firstAttribute="top" secondItem="QcZ-MV-87a" secondAttribute="top" id="SQp-wI-7cw"/>
+                            <constraint firstItem="rXg-l0-lk7" firstAttribute="bottom" secondItem="XNe-nf-cKL" secondAttribute="bottom" id="cdN-P6-RbJ"/>
+                            <constraint firstItem="XNe-nf-cKL" firstAttribute="centerX" secondItem="rXg-l0-lk7" secondAttribute="centerX" id="dTn-zd-A1k"/>
+                            <constraint firstItem="rXg-l0-lk7" firstAttribute="bottom" secondItem="QcZ-MV-87a" secondAttribute="bottom" id="zFB-Wh-jen"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="QcZ-MV-87a"/>
                     </view>
                     <connections>
                         <outlet property="arView" destination="rXg-l0-lk7" id="wpl-qe-IEu"/>
-                        <outlet property="backbutton" destination="XNe-nf-cKL" id="vhH-6k-ZHy"/>
+                        <outlet property="back" destination="XNe-nf-cKL" id="LnE-Fm-jDB"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hRT-rE-bvM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="613.60000000000002" y="202.84857571214394"/>
+            <point key="canvasLocation" x="610.39999999999998" y="201.04947526236884"/>
         </scene>
     </scenes>
 </document>

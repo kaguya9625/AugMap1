@@ -1,11 +1,3 @@
-//
-//  SceneDelegate.swift
-//  AugMap
-//
-//  Created by kaguya on 2019/12/21.
-//  Copyright © 2019 kaguya. All rights reserved.
-//
-
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -50,4 +42,3 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
 }
-
