@@ -13,23 +13,17 @@ import CoreLocation
 class ViewController: UIViewController,
                       CLLocationManagerDelegate,
                       UIGestureRecognizerDelegate,
-                      UISearchBarDelegate,
                       MKMapViewDelegate{
-
-    
+    @IBOutlet var map: MKMapView!
+    @IBOutlet var LongPress: UILongPressGestureRecognizer!
     var locManager:CLLocationManager!
-    
     @IBOutlet weak var button: UIButton!
-    @IBOutlet var longPressGesRec:UILongPressGestureRecognizer!
     var currentlat:Float = 0
     var currentlon:Float = 0
     var pointAno:MKPointAnnotation = MKPointAnnotation()
     var userLocation: CLLocationCoordinate2D!
     var destLocation: CLLocationCoordinate2D!
-    let geocoder = CLGeocoder()
-    
-    @IBOutlet var map: MKMapView!
-    @IBOutlet weak var destSearchBar: UISearchBar!
+
 
     
     @IBAction func ARbutton(_ sender: Any) {
@@ -48,13 +42,11 @@ class ViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         map.delegate = self
-        destSearchBar.delegate = self
         locManager = CLLocationManager()
         locManager.delegate = self
         locManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         locManager.requestWhenInUseAuthorization()
-        
-        
+
         if CLLocationManager.locationServicesEnabled(){
             switch CLLocationManager.authorizationStatus(){
             case .authorizedAlways:
@@ -71,29 +63,29 @@ class ViewController: UIViewController,
 
     
     //目的地を検索
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        // キーボードを隠す
-        destSearchBar.resignFirstResponder()
-        // セット済みのピンを削除
-        self.map.removeAnnotations(self.map.annotations)
-        // 描画済みの経路を削除
-        self.map.removeOverlays(self.map.overlays)
-
-        // 目的地の文字列から座標検索
-     
-        self.geocoder.geocodeAddressString(destSearchBar.text!,completionHandler: {(placemarks: [CLPlacemark]!, error: NSError!) -> Void in
-            if let placemark = placemarks?[0] {
-                // 目的地のΩ座標を取得
-                self.destLocation = CLLocationCoordinate2DMake(placemark.location!.coordinate.latitude, placemark.location!.coordinate.longitude)
-                // 目的地にピンを立てる
-                self.map.addAnnotation(MKPlacemark(placemark: placemark))
-                // 現在地の取得を開始
-                self.locManager.startUpdatingLocation()
-            }
-            
-            // 実行エラー　Thread 1: signal SIGABRT
-            } as! CLGeocodeCompletionHandler)
-    }
+//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+//        // キーボードを隠す
+//        destSearchBar.resignFirstResponder()
+//        // セット済みのピンを削除
+//        self.map.removeAnnotations(self.map.annotations)
+//        // 描画済みの経路を削除
+//        self.map.removeOverlays(self.map.overlays)
+//
+//        // 目的地の文字列から座標検索
+//
+//        self.geocoder.geocodeAddressString(destSearchBar.text!,completionHandler: {(placemarks: [CLPlacemark]!, error: NSError!) -> Void in
+//            if let placemark = placemarks?[0] {
+//                // 目的地のΩ座標を取得
+//                self.destLocation = CLLocationCoordinate2DMake(placemark.location!.coordinate.latitude, placemark.location!.coordinate.longitude)
+//                // 目的地にピンを立てる
+//                self.map.addAnnotation(MKPlacemark(placemark: placemark))
+//                // 現在地の取得を開始
+//                self.locManager.startUpdatingLocation()
+//            }
+//
+//            // 実行エラー　Thread 1: signal SIGABRT
+//            } as! CLGeocodeCompletionHandler)
+//    }
     
     
     
@@ -108,50 +100,50 @@ class ViewController: UIViewController,
         userLocAnnotation.title = "現在地"
         map.addAnnotation(userLocAnnotation)
         // 現在地から目的地家の経路を検索
-        getRoute()
+        //getRoute()
     }
     // 位置情報取得に失敗した時に呼び出されるデリゲート.
     private func locationManager(manager: CLLocationManager!,didFailWithError error: NSError!){
         print("locationManager error")
     }
     
-    //地図上に線を引く
-     func getRoute()
-       {
-           // 現在地と目的地のMKPlacemarkを生成
-        let fromPlacemark = MKPlacemark(coordinate:userLocation, addressDictionary:nil)
-        let toPlacemark   = MKPlacemark(coordinate:destLocation, addressDictionary:nil)
-
-           // MKPlacemark から MKMapItem を生成
-        let fromItem = MKMapItem(placemark:fromPlacemark)
-        let toItem   = MKMapItem(placemark:toPlacemark)
-
-           // MKMapItem をセットして MKDirectionsRequest を生成
-        let request = MKDirections.Request()
-
-
-           request.source = fromItem
-           request.destination = toItem
-           request.requestsAlternateRoutes = false // 単独の経路を検索
-        request.transportType = MKDirectionsTransportType.any
-
-           let directions = MKDirections(request:request)
-           directions.calculate(completionHandler: {
-            (response:MKDirections.Response!, error:NSError!) -> Void in
-
-               response.routes.count
-               if (error != nil || response.routes.isEmpty) {
-                   return
-               }
-            let route: MKRoute = response.routes[0] as MKRoute
-               // 経路を描画
-            self.map.addOverlay(route.polyline)
-               // 現在地と目的地を含む表示範囲を設定する
-            var region:MKCoordinateRegion = self.map.region
-            region.span.latitudeDelta=0.02
-            region.span.longitudeDelta=0.02
-            } as! MKDirections.DirectionsHandler)
-       }
+//    //地図上に線を引く
+//     func getRoute()
+//       {
+//           // 現在地と目的地のMKPlacemarkを生成
+//        let fromPlacemark = MKPlacemark(coordinate:userLocation, addressDictionary:nil)
+//        let toPlacemark   = MKPlacemark(coordinate:destLocation, addressDictionary:nil)
+//
+//           // MKPlacemark から MKMapItem を生成
+//        let fromItem = MKMapItem(placemark:fromPlacemark)
+//        let toItem   = MKMapItem(placemark:toPlacemark)
+//
+//           // MKMapItem をセットして MKDirectionsRequest を生成
+//        let request = MKDirections.Request()
+//
+//
+//           request.source = fromItem
+//           request.destination = toItem
+//           request.requestsAlternateRoutes = false // 単独の経路を検索
+//        request.transportType = MKDirectionsTransportType.any
+//
+//           let directions = MKDirections(request:request)
+//           directions.calculate(completionHandler: {
+//            (response:MKDirections.Response!, error:NSError!) -> Void in
+//
+//               response.routes.count
+//               if (error != nil || response.routes.isEmpty) {
+//                   return
+//               }
+//            let route: MKRoute = response.routes[0] as MKRoute
+//               // 経路を描画
+//            self.map.addOverlay(route.polyline)
+//               // 現在地と目的地を含む表示範囲を設定する
+//            var region:MKCoordinateRegion = self.map.region
+//            region.span.latitudeDelta=0.02
+//            region.span.longitudeDelta=0.02
+//            } as! MKDirections.DirectionsHandler)
+//       }
     
 
     
@@ -191,7 +183,7 @@ class ViewController: UIViewController,
     }
     
     @IBAction func mapLongPress(_ sender: UILongPressGestureRecognizer){
-        let  CGPoint = sender.location(in: map)
+        _ = sender.location(in: map)
         
         if sender.state == .began{
             }

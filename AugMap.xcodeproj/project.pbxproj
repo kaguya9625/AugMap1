@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2B15267423C4118100E12DC1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B15267323C4118100E12DC1 /* SceneDelegate.swift */; };
 		52A6FF1E23AE5404009936E5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A6FF1D23AE5404009936E5 /* AppDelegate.swift */; };
 		52A6FF2223AE5404009936E5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A6FF2123AE5404009936E5 /* ViewController.swift */; };
 		52A6FF2523AE5404009936E5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52A6FF2323AE5404009936E5 /* Main.storyboard */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2B15267323C4118100E12DC1 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = ../../AugMap2/AugMap2/SceneDelegate.swift; sourceTree = "<group>"; };
 		52A6FF1A23AE5404009936E5 /* AugMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AugMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52A6FF1D23AE5404009936E5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		52A6FF2123AE5404009936E5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 			children = (
 				52A6FF1D23AE5404009936E5 /* AppDelegate.swift */,
 				52A6FF2123AE5404009936E5 /* ViewController.swift */,
+				2B15267323C4118100E12DC1 /* SceneDelegate.swift */,
 				52A6FF5623AE6AC5009936E5 /* ARViewController.swift */,
 				52A6FF2323AE5404009936E5 /* Main.storyboard */,
 				52A6FF2623AE5408009936E5 /* Assets.xcassets */,
@@ -266,6 +269,7 @@
 				52A6FF2223AE5404009936E5 /* ViewController.swift in Sources */,
 				52A6FF1E23AE5404009936E5 /* AppDelegate.swift in Sources */,
 				52A6FF5723AE6AC5009936E5 /* ARViewController.swift in Sources */,
+				2B15267423C4118100E12DC1 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
