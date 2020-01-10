@@ -197,7 +197,7 @@ class ViewController: UIViewController,
             if distance >= 3001.0{
                 button.isEnabled = false
                 map.removeAnnotation(pointAno)
-                let alert:UIAlertController = UIAlertController(title:"error!",message:"距離が遠すぎます", preferredStyle: UIAlertController.Style.alert)
+              let alert:UIAlertController = UIAlertController(title:"error!",message:"距離が遠すぎます", preferredStyle: UIAlertController.Style.alert)
                 let confirmAction: UIAlertAction = UIAlertAction(title: "もどる", style: UIAlertAction.Style.default, handler:{
                 // 確定ボタンが押された時の処理をクロージャ実装する
                 (action: UIAlertAction!) -> Void in
@@ -209,8 +209,6 @@ class ViewController: UIViewController,
                      button.isEnabled = true
                      pointAno.title = String(distance)
             }
-     
-        
         }
         
     }

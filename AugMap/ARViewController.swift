@@ -14,6 +14,8 @@ import CoreLocation
 class ARViewController: UIViewController,
                         UIGestureRecognizerDelegate,
                         CLLocationManagerDelegate {
+    override var prefersStatusBarHidden: Bool { return true }
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation { return .slide }
     
     @IBOutlet var arView: ARView!
     @IBOutlet weak var back: UIButton!
@@ -45,13 +47,15 @@ class ARViewController: UIViewController,
         initar()
         setobj()
     }
+    override func viewDidAppear(_ animated: Bool) {
+        alert()
+    }
     func setupLocationManager(){
         locManager = CLLocationManager()
     }
     override func viewWillDisappear(_ animated: Bool) {
         arView.session.pause()
     }
-    
     
     func initar(){
        //arView.debugOptions = [.showStatistics, .showFeaturePoints,.showWorldOrigin]
@@ -64,13 +68,13 @@ class ARViewController: UIViewController,
         let Aug = CalcAngle(pinlat, currentlat, pinlon, currentlon)
         anchor = AnchorEntity(world: Aug)
         arView.scene.anchors.append(anchor)
-        guard let model = try? Entity.load(named:"art.scnassets/tinko") else {return}
-        let _check = check()
-        let unko = SIMD3<Float>(Float(_check),Float(_check),Float(_check))
+        guard let model = try? Entity.load(named:"art.scnassets/") else {return}
+        let unko = SIMD3<Float>(10,10,10)
         model.scale = unko
         anchor.addChild(model)
-        
     }
+    
+
     //オブジェクト座標算出メソッド
     func CalcAngle(_ pinlat1:Float ,_ currentlat2:Float,_ pinlon1:Float,_ currentlon2:Float) -> SIMD3<Float>{
         let lat2km:Float = 111319.319
@@ -91,6 +95,7 @@ class ARViewController: UIViewController,
         }
         let data = SIMD3<Float>(globaldx,-1.25,globaldz)
         return data
+        
     }
     
     //２点の座標から距離をmで表示する
@@ -100,54 +105,32 @@ class ARViewController: UIViewController,
         let Cdistance = pin.distance(from: now)
         return Cdistance
     }
-    
+    //距離が1000~3000mの場合4/1
     func judg() ->Int{
         var data = 0
         let Current_lat = Float((locManager.location?.coordinate.latitude)!)
         let Current_lon = Float((locManager.location?.coordinate.longitude)!)
         distance = CalcDistance(Double(pinlat), Double(Current_lat), Double(pinlon), Double(Current_lon))
         print(distance)
-        if distance <= 3000 && 1000 <= distance{
+        if distance <= 3000 && 1001 <= distance{
             print("4/1")
             data = 1
         }else if distance <= 1001 && 750 <= distance{
             print("2/1")
             data = 2
- 
         }else{
            print("non")
         }
         return data
     }
     
-    func check()->Int{
-        var unko = 0
-        if distance <= 3000 && distance >= 2501{
-            unko = 60
-        }else if distance <= 2500 && distance >= 2001{
-            unko = 55
-        }else if distance <= 2000 && distance >= 1501{
-            unko = 50
-        }else if distance <= 1500 && distance >= 1001{
-            unko = 45
-        }else if distance <= 1000 && distance >= 501{
-            unko = 40
-        }else if distance <= 500 && distance >= 401{
-            unko = 35
-        }else if distance <= 400 && distance >= 301{
-            unko = 30
-        }else if distance <= 300 && distance >= 201{
-            unko = 20
-        }else if distance <= 200 && distance >= 101{
-            unko = 15
-        }else if distance <= 100 && distance >= 51{
-            unko = 8
-        }else if distance <= 50 && distance >= 31{
-            unko = 5
-        }else if distance <= 30 && distance >= 0{
-            unko = 1
-        }
-        print(unko)
-        return unko
+    func alert(){
+       let alert:UIAlertController = UIAlertController(title:"注意",message:"歩きスマホに注意してください", preferredStyle: UIAlertController.Style.alert)
+        let confirmAction: UIAlertAction = UIAlertAction(title: "了解", style: UIAlertAction.Style.default, handler:{
+        // 確定ボタンが押された時の処理をクロージャ実装する
+        (action: UIAlertAction!) -> Void in
+        })
+        alert.addAction(confirmAction)
+        present(alert,animated: true,completion: nil)
     }
 }
