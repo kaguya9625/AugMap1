@@ -47,12 +47,15 @@ class ARViewController: UIViewController,
         initar()
         setobj()
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         alert()
     }
+    
     func setupLocationManager(){
         locManager = CLLocationManager()
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         arView.session.pause()
     }
@@ -65,16 +68,31 @@ class ARViewController: UIViewController,
     }
     
     func setobj(){
-        let Aug = CalcAngle(pinlat, currentlat, pinlon, currentlon)
+        let check = judg()
+        var objname = ""
+        switch check {
+        case 1:
+            objname = "kanban"
+        case 2:
+            //objname = "untitled"
+            objname = "animation"
+        default:
+            break
+        }
+        
+       let Light = DirectionalLightComponent(color: .white, intensity: 2500, isRealWorldProxy: true)
+       guard let model = try? Entity.load(named:"art.scnassets/\(objname)") else {return}
+       let Aug = CalcAngle(pinlat, currentlat, pinlon, currentlon)
         anchor = AnchorEntity(world: Aug)
+        anchor.components.set(Light)
         arView.scene.anchors.append(anchor)
-        guard let model = try? Entity.load(named:"art.scnassets/") else {return}
+
         let unko = SIMD3<Float>(10,10,10)
         model.scale = unko
         anchor.addChild(model)
-    }
+        
+            }
     
-
     //オブジェクト座標算出メソッド
     func CalcAngle(_ pinlat1:Float ,_ currentlat2:Float,_ pinlon1:Float,_ currentlon2:Float) -> SIMD3<Float>{
         let lat2km:Float = 111319.319
@@ -88,14 +106,12 @@ class ARViewController: UIViewController,
             globaldx = globaldx/4
             globaldz = globaldz/4
         case 2:
-            globaldx = globaldx/2
-            globaldz = globaldz/2
+            break
         default:
             print("default")
         }
         let data = SIMD3<Float>(globaldx,-1.25,globaldz)
         return data
-        
     }
     
     //２点の座標から距離をmで表示する
@@ -105,6 +121,7 @@ class ARViewController: UIViewController,
         let Cdistance = pin.distance(from: now)
         return Cdistance
     }
+    
     //距離が1000~3000mの場合4/1
     func judg() ->Int{
         var data = 0
@@ -112,11 +129,11 @@ class ARViewController: UIViewController,
         let Current_lon = Float((locManager.location?.coordinate.longitude)!)
         distance = CalcDistance(Double(pinlat), Double(Current_lat), Double(pinlon), Double(Current_lon))
         print(distance)
-        if distance <= 3000 && 1001 <= distance{
-            print("4/1")
+        if distance <= 3000 && 50 <= distance{
+            print("看板")
             data = 1
-        }else if distance <= 1001 && 750 <= distance{
-            print("2/1")
+        }else if distance <= 49 && 0 <= distance{
+            print("かまトぅ")
             data = 2
         }else{
            print("non")
@@ -133,4 +150,5 @@ class ARViewController: UIViewController,
         alert.addAction(confirmAction)
         present(alert,animated: true,completion: nil)
     }
+    
 }
