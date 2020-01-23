@@ -81,12 +81,13 @@ class ARViewController: UIViewController,
         }
         
        let Light = DirectionalLightComponent(color: .white, intensity: 2500, isRealWorldProxy: true)
+        
        guard let model = try? Entity.load(named:"art.scnassets/\(objname)") else {return}
        let Aug = CalcAngle(pinlat, currentlat, pinlon, currentlon)
         anchor = AnchorEntity(world: Aug)
         anchor.components.set(Light)
         arView.scene.anchors.append(anchor)
-
+        
         let unko = SIMD3<Float>(10,10,10)
         model.scale = unko
         anchor.addChild(model)
