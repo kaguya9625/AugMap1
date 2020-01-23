@@ -20,18 +20,17 @@ class ARViewController: UIViewController,
     @IBOutlet var arView: ARView!
     @IBOutlet weak var back: UIButton!
     var locManager: CLLocationManager!
-    
     //前ページからのデータ受け取り用変数
     var pinlon:Float = 0.0
     var pinlat:Float = 0.0
     var currentlon:Float = 0.0
     var currentlat:Float = 0.0
     var anchor:AnchorEntity!
-     
+    var scale:Float = 0.0
     var distance:Double = 0
     var globaldz:Float = 0.0
     var globaldx:Float = 0.0
-    
+    var objname = ""
     @IBAction func backbutton(_ sender: Any) {
         //遷移処理
           let storyboard: UIStoryboard = self.storyboard!
@@ -68,35 +67,22 @@ class ARViewController: UIViewController,
     }
     
     func setobj(){
-        let check = judg()
-        var objname = ""
-        switch check {
-        case 1:
-            objname = "kanban"
-        case 2:
-            //objname = "untitled"
-            objname = "animation"
-        default:
-            break
-        }
-        
-       let Light = DirectionalLightComponent(color: .white, intensity: 2500, isRealWorldProxy: true)
-        
-       guard let model = try? Entity.load(named:"art.scnassets/\(objname)") else {return}
-       let Aug = CalcAngle(pinlat, currentlat, pinlon, currentlon)
+        let Aug = CalcAngle(pinlat, currentlat, pinlon, currentlon)
+        let Light = DirectionalLightComponent(color: .white, intensity: 2500, isRealWorldProxy: true)
+        guard let model = try? Entity.load(named:"art.scnassets/\(objname)") else {return}
         anchor = AnchorEntity(world: Aug)
         anchor.components.set(Light)
         arView.scene.anchors.append(anchor)
-        
-        let unko = SIMD3<Float>(10,10,10)
+        let unko = SIMD3<Float>(scale,scale,scale)
         model.scale = unko
         anchor.addChild(model)
-        
-            }
+        }
+    
     
     //オブジェクト座標算出メソッド
     func CalcAngle(_ pinlat1:Float ,_ currentlat2:Float,_ pinlon1:Float,_ currentlon2:Float) -> SIMD3<Float>{
         let lat2km:Float = 111319.319
+        let harf:Float = 100
         globaldz = (currentlat2 - pinlat1) * lat2km
         globaldx = -(currentlon2 - pinlon1) * lat2km
         let _judg = judg()
@@ -104,9 +90,15 @@ class ARViewController: UIViewController,
         case 0:
             print("0")
         case 1:
-            globaldx = globaldx/4
-            globaldz = globaldz/4
+             objname = "kanban"
+            let divisor = Float(distance)/harf
+            print(divisor)
+            globaldx = globaldx/divisor
+            globaldz = globaldz/divisor
+            scale = 10.0
         case 2:
+            objname = "animation"
+            scale = Float(distance)/5
             break
         default:
             print("default")
@@ -123,13 +115,17 @@ class ARViewController: UIViewController,
         return Cdistance
     }
     
+    func nowtopin() -> Double{
+        let Current_lat = Float((locManager.location?.coordinate.latitude)!)
+        let Current_lon = Float((locManager.location?.coordinate.longitude)!)
+        let distance1 = CalcDistance(Double(pinlat), Double(Current_lat), Double(pinlon), Double(Current_lon))
+        return distance1
+    }
     //距離が1000~3000mの場合4/1
     func judg() ->Int{
         var data = 0
-        let Current_lat = Float((locManager.location?.coordinate.latitude)!)
-        let Current_lon = Float((locManager.location?.coordinate.longitude)!)
-        distance = CalcDistance(Double(pinlat), Double(Current_lat), Double(pinlon), Double(Current_lon))
-        print(distance)
+        distance = nowtopin()
+        print("距離:\(distance)")
         if distance <= 3000 && 50 <= distance{
             print("看板")
             data = 1
