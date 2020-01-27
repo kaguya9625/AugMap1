@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -30,6 +30,14 @@
                                     <action selector="ARbutton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="MOd-2t-xZH"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Chf-iu-12p">
+                                <rect key="frame" x="288" y="59" width="62" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="円を表示"/>
+                                <connections>
+                                    <action selector="Circle:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5bd-RC-SMp"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <gestureRecognizers/>
@@ -44,6 +52,7 @@
                         <viewLayoutGuide key="safeArea" id="B5e-6N-7mh"/>
                     </view>
                     <connections>
+                        <outlet property="Circlebtn" destination="Chf-iu-12p" id="ynB-FT-ujA"/>
                         <outlet property="LongPress" destination="bDN-Td-6ef" id="HPx-uM-YLC"/>
                         <outlet property="button" destination="bu8-o1-aWl" id="ot2-8d-8z6"/>
                         <outlet property="map" destination="W4o-Bn-ZR4" id="0pM-us-fuf"/>

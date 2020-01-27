@@ -38,6 +38,8 @@
 
 /* Begin PBXFileReference section */
 		2B15267723C4252C00E12DC1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		5261835723DE980100B5FC45 /* kanban.dae */ = {isa = PBXFileReference; lastKnownFileType = text.xml.dae; path = kanban.dae; sourceTree = "<group>"; };
+		5261835823DE980100B5FC45 /* animation.dae */ = {isa = PBXFileReference; lastKnownFileType = text.xml.dae; path = animation.dae; sourceTree = "<group>"; };
 		52A6FF1A23AE5404009936E5 /* AugMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AugMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52A6FF1D23AE5404009936E5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		52A6FF2123AE5404009936E5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -103,6 +105,8 @@
 		52A6FF1C23AE5404009936E5 /* AugMap */ = {
 			isa = PBXGroup;
 			children = (
+				5261835823DE980100B5FC45 /* animation.dae */,
+				5261835723DE980100B5FC45 /* kanban.dae */,
 				52A6FF1D23AE5404009936E5 /* AppDelegate.swift */,
 				52A6FF2123AE5404009936E5 /* ViewController.swift */,
 				52A6FF5623AE6AC5009936E5 /* ARViewController.swift */,

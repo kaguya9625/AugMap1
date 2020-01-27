@@ -10,10 +10,12 @@ import UIKit
 import ARKit
 import RealityKit
 import CoreLocation
+import CoreMotion
 
 class ARViewController: UIViewController,
                         UIGestureRecognizerDelegate,
-                        CLLocationManagerDelegate {
+                        CLLocationManagerDelegate,
+                        ARSessionDelegate{
     override var prefersStatusBarHidden: Bool { return true }
     override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation { return .slide }
     
@@ -25,12 +27,16 @@ class ARViewController: UIViewController,
     var pinlat:Float = 0.0
     var currentlon:Float = 0.0
     var currentlat:Float = 0.0
+    
+    
     var anchor:AnchorEntity!
     var scale:Float = 0.0
     var distance:Double = 0
     var globaldz:Float = 0.0
     var globaldx:Float = 0.0
     var objname = ""
+    
+    let motionManager = CMMotionManager()
     @IBAction func backbutton(_ sender: Any) {
         //遷移処理
           let storyboard: UIStoryboard = self.storyboard!
@@ -41,8 +47,10 @@ class ARViewController: UIViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        arView.session.delegate = self
         setupLocationManager()
         locManager.startUpdatingLocation()
+        startSensorUpdates(intervalSeconds: 0.1)
         initar()
         setobj()
     }
@@ -68,15 +76,17 @@ class ARViewController: UIViewController,
     
     func setobj(){
         let Aug = CalcAngle(pinlat, currentlat, pinlon, currentlon)
-        let Light = DirectionalLightComponent(color: .white, intensity: 2500, isRealWorldProxy: true)
-        guard let model = try? Entity.load(named:"art.scnassets/\(objname)") else {return}
         anchor = AnchorEntity(world: Aug)
+        let Light = DirectionalLightComponent(color: .white, intensity: 2500, isRealWorldProxy: true)
         anchor.components.set(Light)
-        arView.scene.anchors.append(anchor)
-        let unko = SIMD3<Float>(scale,scale,scale)
-        model.scale = unko
+        arView.scene.addAnchor(anchor)
+        guard let model = try? Entity.load(named:"art.scnassets/\(objname)") else {return}
+        let modelscale = SIMD3<Float>(scale,scale,scale)
+        model.scale = modelscale
+        
+        
         anchor.addChild(model)
-        }
+    }
     
     
     //オブジェクト座標算出メソッド
@@ -90,11 +100,13 @@ class ARViewController: UIViewController,
         case 0:
             print("0")
         case 1:
-             objname = "kanban"
+            objname = "kanban"
             let divisor = Float(distance)/harf
             print(divisor)
             globaldx = globaldx/divisor
             globaldz = globaldz/divisor
+            print(globaldx)
+            print(globaldz)
             scale = 10.0
         case 2:
             objname = "animation"
@@ -148,4 +160,20 @@ class ARViewController: UIViewController,
         present(alert,animated: true,completion: nil)
     }
     
+    func startSensorUpdates(intervalSeconds:Double){
+        if motionManager.isDeviceMotionAvailable{
+            motionManager.deviceMotionUpdateInterval  = intervalSeconds
+            motionManager.startDeviceMotionUpdates(to:OperationQueue.current!,withHandler: {(motion:CMDeviceMotion?,error:Error?)in self.getMotionData(deviceMotion:motion!)
+                
+            })
+        }
+    }
+    
+    func getMotionData(deviceMotion:CMDeviceMotion){
+               let camera = arView.cameraTransform.rotation
+               let angle = camera.angle
+               let nowi = camera.axis.y
+               let i = simd_normalize(simd_float3(0,nowi,0))
+               anchor.transform.rotation = simd_quatf(angle:angle,axis:i)
+    }
 }

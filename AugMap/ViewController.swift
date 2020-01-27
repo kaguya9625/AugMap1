@@ -24,8 +24,11 @@ class ViewController: UIViewController,
     var pointAno:MKPointAnnotation = MKPointAnnotation()
     var userLocation: CLLocationCoordinate2D!
     var destLocation: CLLocationCoordinate2D!
-
-
+    var mkCircle = MKCircle(center:CLLocationCoordinate2DMake(0.0,0.0),radius: 1000)
+    var mySearchBar:UISearchBar!
+    var myRegion: MKCoordinateRegion!
+    var CircleCheck = 0
+    @IBOutlet weak var Circlebtn: UIButton!
     
     @IBAction func ARbutton(_ sender: Any) {
              //遷移処理
@@ -219,6 +222,29 @@ class ViewController: UIViewController,
             let dist = bloc.distance(from: aloc)
             return dist
     }
-
+    
+    //円の表示
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        let circle : MKCircleRenderer = MKCircleRenderer(overlay: overlay);
+        circle.strokeColor = UIColor.green //円のborderの色
+        circle.fillColor = UIColor(red: 0.0, green: 0.2, blue: 0.5, alpha: 0.3)  //円全体の色。今回は赤色
+        circle.lineWidth = 1.0 //円のボーダーの太さ。
+        return circle
+    }
+    
+    @IBAction func Circle(_ sender: Any) {
+     if CircleCheck == 0{
+         CircleCheck += 1
+     let userCoordinate = map.userLocation.coordinate//現在地取得(円の中心)
+     
+    
+     mkCircle = MKCircle(center: userCoordinate, radius:3000)//円の中心と半径を設定
+     map.addOverlay(mkCircle)//円を描写(さっき書いたメソッドの呼び出し)
+     }else{
+         CircleCheck -= 1
+         map.removeOverlay(mkCircle) //すでにマップ上にある円を削除
+     }
+     
+     }
 }
 
