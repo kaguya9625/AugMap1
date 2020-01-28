@@ -66,7 +66,7 @@ class ViewController: UIViewController,
     
 
     
-    //目的地を検索
+//目的地を検索
 //    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
 //        // キーボードを隠す
 //        destSearchBar.resignFirstResponder()
@@ -234,17 +234,16 @@ class ViewController: UIViewController,
     
     @IBAction func Circle(_ sender: Any) {
      if CircleCheck == 0{
-         CircleCheck += 1
+         CircleCheck = 1
+        Circlebtn.setTitle("円を非表示", for: .normal)
      let userCoordinate = map.userLocation.coordinate//現在地取得(円の中心)
-     
-    
      mkCircle = MKCircle(center: userCoordinate, radius:3000)//円の中心と半径を設定
      map.addOverlay(mkCircle)//円を描写(さっき書いたメソッドの呼び出し)
      }else{
-         CircleCheck -= 1
+         CircleCheck = 0
+        Circlebtn.setTitle("円を表示", for: .normal)
          map.removeOverlay(mkCircle) //すでにマップ上にある円を削除
-     }
-     
-     }
+      }
+    }
 }
 

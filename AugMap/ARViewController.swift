@@ -83,8 +83,6 @@ class ARViewController: UIViewController,
         guard let model = try? Entity.load(named:"art.scnassets/\(objname)") else {return}
         let modelscale = SIMD3<Float>(scale,scale,scale)
         model.scale = modelscale
-        
-        
         anchor.addChild(model)
     }
     
@@ -111,6 +109,9 @@ class ARViewController: UIViewController,
         case 2:
             objname = "animation"
             scale = Float(distance)/5
+            if scale < 0.5{
+                scale = 0.5
+            }
             break
         default:
             print("default")
