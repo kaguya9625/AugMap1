@@ -16,9 +16,10 @@ class ARViewController: UIViewController,
                         UIGestureRecognizerDelegate,
                         CLLocationManagerDelegate,
                         ARSessionDelegate{
+    
     override var prefersStatusBarHidden: Bool { return true }
     override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation { return .slide }
-    
+
     @IBOutlet var arView: ARView!
     @IBOutlet weak var back: UIButton!
     var locManager: CLLocationManager!
@@ -44,7 +45,7 @@ class ARViewController: UIViewController,
            self.present(mappage,animated: true,completion: nil)
         arView.scene.removeAnchor(anchor)
        }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         arView.session.delegate = self
@@ -61,6 +62,8 @@ class ARViewController: UIViewController,
     
     func setupLocationManager(){
         locManager = CLLocationManager()
+        locManager.delegate = self
+        locManager.startUpdatingLocation()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -85,7 +88,6 @@ class ARViewController: UIViewController,
         model.scale = modelscale
         anchor.addChild(model)
     }
-    
     
     //オブジェクト座標算出メソッド
     func CalcAngle(_ pinlat1:Float ,_ currentlat2:Float,_ pinlon1:Float,_ currentlon2:Float) -> SIMD3<Float>{
@@ -112,6 +114,7 @@ class ARViewController: UIViewController,
             if scale < 0.5{
                 scale = 0.5
             }
+            
             break
         default:
             print("default")
@@ -134,6 +137,7 @@ class ARViewController: UIViewController,
         let distance1 = CalcDistance(Double(pinlat), Double(Current_lat), Double(pinlon), Double(Current_lon))
         return distance1
     }
+    
     //距離が1000~3000mの場合4/1
     func judg() ->Int{
         var data = 0
@@ -165,7 +169,6 @@ class ARViewController: UIViewController,
         if motionManager.isDeviceMotionAvailable{
             motionManager.deviceMotionUpdateInterval  = intervalSeconds
             motionManager.startDeviceMotionUpdates(to:OperationQueue.current!,withHandler: {(motion:CMDeviceMotion?,error:Error?)in self.getMotionData(deviceMotion:motion!)
-                
             })
         }
     }
@@ -176,5 +179,10 @@ class ARViewController: UIViewController,
                let nowi = camera.axis.y
                let i = simd_normalize(simd_float3(0,nowi,0))
                anchor.transform.rotation = simd_quatf(angle:angle,axis:i)
+    }
+    
+    func locationManager(_ manager: CLLocationManager,didUpdateLocations locations:[CLLocation]){
+        arView.scene.removeAnchor(anchor)
+        setobj()
     }
 }
