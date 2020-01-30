@@ -32,15 +32,47 @@ class ViewController: UIViewController,
     
     @IBAction func ARbutton(_ sender: Any) {
              //遷移処理
-             let storyboard: UIStoryboard = self.storyboard!
-             let ARpage = storyboard.instantiateViewController(withIdentifier: "ARpage") as! ARViewController
-             ARpage.pinlon = Float(pointAno.coordinate.longitude)
-             ARpage.pinlat = Float(pointAno.coordinate.latitude)
-             ARpage.currentlat = Float(map.userLocation.coordinate.latitude)
-             ARpage.currentlon = Float(map.userLocation.coordinate.longitude)
-            
-             self.present(ARpage,animated: true,completion: nil)
+//             let storyboard: UIStoryboard = self.storyboard!
+//             let ARpage = storyboard.instantiateViewController(withIdentifier: "ARpage") as! ARViewController
+//             ARpage.pinlon = Float(pointAno.coordinate.longitude)
+//             ARpage.pinlat = Float(pointAno.coordinate.latitude)
+//             ARpage.currentlat = Float(map.userLocation.coordinate.latitude)
+//             ARpage.currentlon = Float(map.userLocation.coordinate.longitude)
+//
+//             self.present(ARpage,animated: true,completion: nil)
+
+        let sourceL = map.userLocation.coordinate
+        let destinaL = pointAno.coordinate
+        
+        let sourcePlaceMark = MKPlacemark(coordinate: sourceL)
+        let destinaPlaceMark = MKPlacemark(coordinate: destinaL)
+        let directionRequest = MKDirections.Request()
+        directionRequest.source = MKMapItem(placemark: sourcePlaceMark)
+        directionRequest.destination = MKMapItem(placemark: destinaPlaceMark)
+        directionRequest.transportType = .walking
+        
+        let directions = MKDirections(request: directionRequest)
+        directions.calculate{(response,error)in
+            guard let directionResonse = response else{
+                if let error = error{
+                    print("error")
+                }
+                return
+            }
+            let route = directionResonse.routes[0]
+            self.map.addOverlay(route.polyline, level: .aboveRoads)
+            let rect = route.polyline.boundingMapRect
+            self.map.setRegion(MKCoordinateRegion(rect), animated: true)
+                                 
+        }
     }
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+          let renderer = MKPolylineRenderer(overlay: overlay)
+          renderer.strokeColor = UIColor.blue
+          renderer.lineWidth = 4.0
+          return renderer
+      }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,7 +92,6 @@ class ViewController: UIViewController,
                 break
             }
         }
-        
         initMap()
     }
     
@@ -224,13 +255,13 @@ class ViewController: UIViewController,
     }
     
     //円の表示
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        let circle : MKCircleRenderer = MKCircleRenderer(overlay: overlay);
-        circle.strokeColor = UIColor.green //円のborderの色
-        circle.fillColor = UIColor(red: 0.0, green: 0.2, blue: 0.5, alpha: 0.3)  //円全体の色。今回は赤色
-        circle.lineWidth = 1.0 //円のボーダーの太さ。
-        return circle
-    }
+//    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+//        let circle : MKCircleRenderer = MKCircleRenderer(overlay: overlay);
+//        circle.strokeColor = UIColor.green //円のborderの色
+//        circle.fillColor = UIColor(red: 0.0, green: 0.2, blue: 0.5, alpha: 0.3)  //円全体の色。今回は赤色
+//        circle.lineWidth = 1.0 //円のボーダーの太さ。
+//        return circle
+//    }
     
     @IBAction func Circle(_ sender: Any) {
      if CircleCheck == 0{

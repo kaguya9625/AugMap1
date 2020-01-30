@@ -100,13 +100,9 @@ class ARViewController: UIViewController,
         case 0:
             print("0")
         case 1:
-            objname = "kanban"
             let divisor = Float(distance)/harf
-            print(divisor)
             globaldx = globaldx/divisor
             globaldz = globaldz/divisor
-            print(globaldx)
-            print(globaldz)
             scale = 10.0
         case 2:
             objname = "animation"
@@ -114,7 +110,6 @@ class ARViewController: UIViewController,
             if scale < 0.5{
                 scale = 0.5
             }
-            
             break
         default:
             print("default")
@@ -142,12 +137,9 @@ class ARViewController: UIViewController,
     func judg() ->Int{
         var data = 0
         distance = nowtopin()
-        print("距離:\(distance)")
         if distance <= 3000 && 50 <= distance{
-            print("看板")
             data = 1
         }else if distance <= 49 && 0 <= distance{
-            print("かまトぅ")
             data = 2
         }else{
            print("non")
@@ -183,6 +175,33 @@ class ARViewController: UIViewController,
     
     func locationManager(_ manager: CLLocationManager,didUpdateLocations locations:[CLLocation]){
         arView.scene.removeAnchor(anchor)
-        setobj()
+        var locationAdded:Bool
+        if let newLocation = locations.last{
+        locationAdded = filterAndAddLocation(newLocation)
+            if locationAdded{
+                currentlat = Float(newLocation.coordinate.latitude)
+                currentlon = Float(newLocation.coordinate.longitude)
+                setobj()
+            }
+        }
     }
+    
+    func filterAndAddLocation(_ location: CLLocation) -> Bool{
+        let age = -location.timestamp.timeIntervalSinceNow
+        
+        if age > 10{
+            return false
+        }
+        
+        if location.horizontalAccuracy < 0{
+            return false
+        }
+        
+        if location.horizontalAccuracy > 100{
+            return false
+        }
+        
+        return true
+    }
+    
 }
